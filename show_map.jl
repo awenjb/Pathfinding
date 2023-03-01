@@ -47,13 +47,11 @@ function show_map(map::Matrix{String})
             end
         end
 
+        # detect a click on the canva
         c.mouse.button1press = @guarded (widget, event) -> begin
-        ctx = getgc(widget)
-        set_source_rgb(ctx, 0, 1, 0)
-        arc(ctx, event.x, event.y, 5, 0, 2pi)
-        stroke(ctx)
-        reveal(widget)
-    end
+        println("x : ", event.x , " y : ", event.y)
+        
+        end 
 
     end
 

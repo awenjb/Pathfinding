@@ -14,9 +14,9 @@ W - water (traversable, but not passable from terrain) value = ∞
 =#
 
 
-function main() 
+function main(file::String) 
     # import map 
-    map = read_map_file("map/arena.map")
+    map = read_map_file(file)
 
     empty_map::Matrix{String} = ["." "." "." "." ".";
                                 "." "." "." "T" ".";
@@ -32,5 +32,3 @@ function main()
 
     show_map(map)
 end
-
-main()
