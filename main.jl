@@ -1,7 +1,7 @@
 
 include("read_map_file.jl")
 include("show_map.jl")
-
+include("dijkstra.jl")
 
 #= 
 . - passable terrain : value = 1
@@ -25,10 +25,15 @@ function main(file::String)
                                 "." "." "." "." "."]
 
     # coodinate of the start point
-    start_point::Tuple{Int64, Int64} = (4,4) 
+    start_point::Tuple{Int64, Int64} = (10,10) 
 
     # coodinate of the end point
-    end_point::Tuple{Int64, Int64} = (2,2) 
+    end_point::Tuple{Int64, Int64} = (34,34) 
 
-    show_map(map)
+    result::Tuple{Vector{Tuple{Int64, Int64}},Vector{Tuple{Int64, Int64}}} = ([], [])
+
+
+    result = dijkstra(map, start_point, end_point)
+    show_map(map, result[1], result[2])
+
 end
