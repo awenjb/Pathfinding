@@ -63,7 +63,7 @@ function dijkstra(map::Matrix{String}, src::Tuple{Int64, Int64}, target::Tuple{I
     
     # Initialize 
     
-    
+    step::Int64 = 0
     dist[src[1], src[2]] = 0  # distance to source is 0
     
     empty!(near)
@@ -73,7 +73,7 @@ function dijkstra(map::Matrix{String}, src::Tuple{Int64, Int64}, target::Tuple{I
     
     found::Bool = false
     while !(found)
-    
+        step += 1
         # Choisir premier sommet S dans next_cells de plus petite distance
         crt = minDistance(dist, near)
     
@@ -143,9 +143,8 @@ function dijkstra(map::Matrix{String}, src::Tuple{Int64, Int64}, target::Tuple{I
     end
     
     # calcul du plus cours chemin
-    
-    println("chemin: ", path)
-
+    println("nb d'étapes : ", step)
+    println("taille du chemin : ", length(path))
     return (visited, path)
 end
     
