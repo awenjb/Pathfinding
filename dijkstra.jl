@@ -1,23 +1,7 @@
-using OrderedCollections
 
+using DataStructures
 include("show_map.jl")
 
-
-# function returning the minimum value of an ordered set of cells
-function minDistance(M::Matrix{Int64}, cells::OrderedSet{Tuple{Int64,Int64}})
-
-    min::Int64 = M[cells[1][1], cells[1][2]]
-    min_index::Tuple{Int64,Int64} = (cells[1][1], cells[1][2])
-
-    # from the set non visited and accessible cells, find the the cell with the shortest path value from the start
-    for i in eachindex(cells)
-        if ( M[cells[i][1], cells[i][2]] < min )
-            min = M[cells[i][1], cells[i][2]]
-            min_index = cells[i]
-        end
-    end 
-    return min_index
-end
 
 # Function returning a Tuple (Bool, int) which represent if the cell is accessible and it costs
 # costs :
@@ -53,7 +37,8 @@ function dijkstra(map::Matrix{String}, src::Tuple{Int64, Int64}, target::Tuple{I
 
     path::Vector{Tuple{Int64, Int64}} = []  # shortest path
     
-    near::OrderedSet{Tuple{Int64,Int64}} = OrderedSet{Tuple{Int64,Int64}}() # contains next to visit cells
+    open = PriorityQueue{Tuple{Int64,Int64}, Int64}() 
+    close::Matrix{Bool} = Matrix{Bool}(fill(false, (size(map, 1), size(map, 2))))
     
     dist::Matrix{Int64} = Matrix{Int64}(fill( -1,(size(map, 1), size(map, 2)) ))   # Matrix of distance from the source
     
@@ -65,23 +50,20 @@ function dijkstra(map::Matrix{String}, src::Tuple{Int64, Int64}, target::Tuple{I
     # Initialize 
     
     step::Int64 = 0
+
     dist[src[1], src[2]] = 0  # distance to source is 0
-    
-    empty!(near)
-    push!(near, src)
+
+    enqueue!(open, src, dist[src[1], src[2]])
+
     
     # -- Dijkstra --
     
     found::Bool = false
     while !(found)
-        step += 1
+
         # Choisir premier sommet S dans next_cells de plus petite distance
-        crt = minDistance(dist, near)
-    
-        if isempty(near)
-            println("no path found")
-            found = true
-        end
+
+        crt = dequeue!(open)
     
         if crt != target 
     
@@ -111,19 +93,20 @@ function dijkstra(map::Matrix{String}, src::Tuple{Int64, Int64}, target::Tuple{I
                     # pred de voisin devient S
                     pred[i[1], i[2]] = crt
     
-                    # ajout du voisin dans la liste des cellules proches
-                    push!(near, i)
+                    # ajout du voisin dans la liste des cellules proches s'il n'a pas déjà été visité
+                    if !(close[i[1], i[2]])
+                        enqueue!(open, i, dist[i[1], i[2]])
+                        close[i[1], i[2]] = true
+                    end
                     
                 end 
             end
-    
-            # retire S de la liste des visitables
-            delete!(near, crt)
-            # ajouter S dans la liste des visiter
+
+            # ajouter S dans la liste des visités
             push!(visited, crt)
     
     
-            if isempty(near)
+            if isempty(open)
                 println("no path found")
                 found = true
             end
@@ -132,7 +115,6 @@ function dijkstra(map::Matrix{String}, src::Tuple{Int64, Int64}, target::Tuple{I
             println("trouvé !")
             found = true
     
-            delete!(near, crt)
             push!(visited, crt)
     
             while crt != src

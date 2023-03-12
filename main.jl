@@ -26,15 +26,17 @@ function main(file::String)
                                 "." "." "." "." "."]
 
     # coodinate of the start point
-    start_point::Tuple{Int64, Int64} = (100, 150) 
+    start_point::Tuple{Int64, Int64} = (150, 100) 
+    #start_point::Tuple{Int64, Int64} = (10, 10) 
     # coodinate of the end point
     end_point::Tuple{Int64, Int64} = (853,926) 
+    #end_point::Tuple{Int64, Int64} = (40, 40) 
 
     result::Tuple{Vector{Tuple{Int64, Int64}},Vector{Tuple{Int64, Int64}}} = ([], [])
 
 
-    #@time result = dijkstra(map, start_point, end_point)
-    result = AStar(map, start_point, end_point)
+    @time result = dijkstra(map, start_point, end_point)
+    #result = AStar(map, start_point, end_point)
     #show_map(map, [(1,1)], [(1,1)])
     show_map(map, result[1], result[2])
 end
