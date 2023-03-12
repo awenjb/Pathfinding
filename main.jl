@@ -35,8 +35,8 @@ function main(file::String)
     result::Tuple{Vector{Tuple{Int64, Int64}},Vector{Tuple{Int64, Int64}}} = ([], [])
 
 
-    @time result = dijkstra(map, start_point, end_point)
-    #result = AStar(map, start_point, end_point)
+    #@time result = dijkstra(map, start_point, end_point)
+    @time result = AStar(map, start_point, end_point)
     #show_map(map, [(1,1)], [(1,1)])
     show_map(map, result[1], result[2])
 end

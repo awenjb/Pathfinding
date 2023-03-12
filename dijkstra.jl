@@ -1,7 +1,4 @@
-
 using DataStructures
-include("show_map.jl")
-
 
 # Function returning a Tuple (Bool, int) which represent if the cell is accessible and it costs
 # costs :
