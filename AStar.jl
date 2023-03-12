@@ -1,23 +1,30 @@
 using OrderedCollections
 
-include("show_map.jl")
+# heuristique : Distance de Manhattan
+
+function h(A::Tuple{Int64,Int64}, B::Tuple{Int64,Int64})
+    return abs(B[1]-A[1]) + abs(B[2]-A[2])
+end
 
 
 # function returning the minimum value of an ordered set of cells
-function minDistance(M::Matrix{Int64}, cells::OrderedSet{Tuple{Int64,Int64}})
+function minDistance(M::Matrix{Int64}, cells::OrderedSet{Tuple{Int64,Int64}}, goal::Tuple{Int64,Int64} )
 
-    min::Int64 = M[cells[1][1], cells[1][2]]
+    min::Int64 = M[cells[1][1], cells[1][2]] + h((cells[1][1], cells[1][2]), goal)
     min_index::Tuple{Int64,Int64} = (cells[1][1], cells[1][2])
 
     # from the set non visited and accessible cells, find the the cell with the shortest path value from the start
     for i in eachindex(cells)
-        if ( M[cells[i][1], cells[i][2]] < min )
-            min = M[cells[i][1], cells[i][2]]
+        f::Int64 = M[cells[i][1], cells[i][2]] + h((cells[i][1], cells[i][2]), goal)
+        if ( f < min )
+            min = f
             min_index = cells[i]
         end
     end 
     return min_index
 end
+
+
 
 # Function returning a Tuple (Bool, int) which represent if the cell is accessible and it costs
 # costs :
@@ -49,7 +56,7 @@ function cost(map::Matrix{String}, cell::Tuple{Int64, Int64})
     end
 end
 
-function dijkstra(map::Matrix{String}, src::Tuple{Int64, Int64}, target::Tuple{Int64, Int64})
+function AStar(map::Matrix{String}, src::Tuple{Int64, Int64}, target::Tuple{Int64, Int64})
 
     path::Vector{Tuple{Int64, Int64}} = []  # shortest path
     
@@ -76,7 +83,7 @@ function dijkstra(map::Matrix{String}, src::Tuple{Int64, Int64}, target::Tuple{I
     while !(found)
         step += 1
         # Choisir premier sommet S dans next_cells de plus petite distance
-        crt = minDistance(dist, near)
+        crt = minDistance(dist, near, target)
     
         if isempty(near)
             println("no path found")
@@ -149,3 +156,4 @@ function dijkstra(map::Matrix{String}, src::Tuple{Int64, Int64}, target::Tuple{I
     return (visited, path)
 end
     
+
