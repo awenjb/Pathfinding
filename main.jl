@@ -16,27 +16,18 @@ W - water (traversable, but not passable from terrain) value = ∞
 
 
 function main(file::String) 
-    # import map 
+
     map = read_map_file(file)
 
-    empty_map::Matrix{String} = ["." "." "." "." ".";
-                                "." "." "." "T" ".";
-                                "." "." "T" "T" ".";
-                                "." "." "." "." ".";
-                                "." "." "." "." "."]
-
-    # coodinate of the start point
     start_point::Tuple{Int64, Int64} = (150, 100) 
-    #start_point::Tuple{Int64, Int64} = (10, 10) 
-    # coodinate of the end point
     end_point::Tuple{Int64, Int64} = (853,926) 
-    #end_point::Tuple{Int64, Int64} = (40, 40) 
 
-    result::Tuple{Vector{Tuple{Int64, Int64}},Vector{Tuple{Int64, Int64}}} = ([], [])
+    result1::Tuple{Vector{Tuple{Int64, Int64}},Vector{Tuple{Int64, Int64}}} = ([], [])
+    result2::Tuple{Vector{Tuple{Int64, Int64}},Vector{Tuple{Int64, Int64}}} = ([], [])
 
+    @time result1 = dijkstra(map, start_point, end_point)
+    @time result2 = AStar(map, start_point, end_point)
 
-    #@time result = dijkstra(map, start_point, end_point)
-    @time result = AStar(map, start_point, end_point)
-    #show_map(map, [(1,1)], [(1,1)])
-    show_map(map, result[1], result[2])
+    show_map(map, result1[1], result1[2])
+    show_map(map, result2[1], result2[2])
 end

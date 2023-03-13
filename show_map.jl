@@ -55,12 +55,6 @@ function show_map(map::Matrix{String}, visited::Vector{Tuple{Int64, Int64}}, pat
             fill(ctx)
         end
 
-        # detect a click on the canva
-        c.mouse.button1press = @guarded (widget, event) -> begin
-        println("x : ", event.x , " y : ", event.y)
-        
-        end 
-
     end
 
     show(c)
