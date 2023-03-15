@@ -1,4 +1,8 @@
-using OrderedCollections
+using DataStructures
+
+include("read_map_file.jl")
+include("show_map.jl")
+
 
 # Return the distance between to cell
 function heuristic(A::Tuple{Int64,Int64}, B::Tuple{Int64,Int64})
@@ -127,9 +131,14 @@ function AStar(map::Matrix{String}, src::Tuple{Int64, Int64}, target::Tuple{Int6
         end
     end
     
-    println("Nombre d'étapes : ", step)
-    println("Taille du chemin : ", length(path))
+    println("Nombre d'étapes de recherche : ", step)
+    println("Taille du chemin : ", dist[target[1], target[2] ])
+    println("Nombre de cases du chemin : ", length(path))
     return (visited, path)
 end
     
-
+function algoAStar(file::String, src::Tuple{Int64, Int64}, target::Tuple{Int64, Int64})
+    map::Matrix{String} = read_map_file(string("map/",file))
+    @time result = AStar(map, src, target)
+    show_map(map, result[1], result[2])
+end

@@ -1,10 +1,14 @@
 using DataStructures
 
-# Function returning a Tuple (Bool, int) which represent if the cell is accessible and it costs
-# costs :
-# any -> water : 8
-# any -> swamp : 5
-# any -> normal: 1
+include("read_map_file.jl")
+include("show_map.jl")
+
+
+#= 
+    Return the cost value of a cell which contains :
+    a boolean, true if the cell is accessible, false otherwise
+    an integer, cost of "traveling"
+=#
 function cost(map::Matrix{String}, cell::Tuple{Int64, Int64})
 
     # is out of bounds ?
@@ -58,7 +62,7 @@ function dijkstra(map::Matrix{String}, src::Tuple{Int64, Int64}, target::Tuple{I
     
     
     while !(found)
-
+        step +=1
         # Choose the next cell to visit
         crt = dequeue!(open)
     
@@ -124,8 +128,14 @@ function dijkstra(map::Matrix{String}, src::Tuple{Int64, Int64}, target::Tuple{I
     end
     
     # calcul du plus cours chemin
-    println("Nombre d'étapes : ", step)
-    println("Taille du chemin : ", length(path))
+    println("Nombre d'étapes de recherche : ", step)
+    println("Taille du chemin : ", dist[target[1], target[2] ])
+    println("Nombre de cases du chemin : ", length(path))
     return (visited, path)
 end
     
+function algoDijkstra(file::String, src::Tuple{Int64, Int64}, target::Tuple{Int64, Int64})
+    map::Matrix{String} = read_map_file(string("map/",file))
+    @time result = dijkstra(map, src, target)
+    show_map(map, result[1], result[2])
+end
