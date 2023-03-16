@@ -4,10 +4,10 @@ include("read_map_file.jl")
 include("show_map.jl")
 
 
-# Return the distance between to cell
+# Manhattan distance
 function heuristic(A::Tuple{Int64,Int64}, B::Tuple{Int64,Int64})
     return abs(B[1]-A[1]) + abs(B[2]-A[2])
-end
+end 
 
 #= 
     Return the cost value of a cell which contains :
@@ -25,8 +25,7 @@ function cost(map::Matrix{String}, cell::Tuple{Int64, Int64})
     # type of the cell ( a character )
     c = map[cell[1], cell[2]]
     
-    # type evaluation 
-
+    # evaluation 
     if c == "@" || c == "T" || c == "O"
         return (false, 0)
     end 
@@ -69,8 +68,10 @@ function AStar(map::Matrix{String}, src::Tuple{Int64, Int64}, target::Tuple{Int6
         step += 1
 
         # Choose the next cell to visit
-        crt = dequeue!(open)
-    
+        crt = dequeue!(open)    
+        push!(visited, crt)
+
+
         if crt != target 
 
             neighbor::Vector{Tuple{Int64,Int64}} = []
@@ -98,19 +99,22 @@ function AStar(map::Matrix{String}, src::Tuple{Int64, Int64}, target::Tuple{Int6
             =#
             for i in neighbor
 
-                if dist[i[1], i[2]] > dist[crt[1], crt[2]] || dist[i[1], i[2]] == -1       
-                    dist[i[1], i[2]] = dist[crt[1], crt[2]] + cost(map, i)[2]
-                    pred[i[1], i[2]] = crt
+                new_dist::Int64 = dist[crt[1], crt[2]] + cost(map, i)[2]
 
-                     if !(close[i[1], i[2]])
-                        enqueue!(open, i, dist[i[1], i[2]] + heuristic(i, target) )
-                        close[i[1], i[2]] = true
-                    end   
+                if dist[i[1], i[2]] > new_dist || !(close[i[1], i[2]])   
+
+                    # if already visited before, delete from priority queue
+                    if haskey(open, i) 
+                        delete!(open, i)
+                    end
+
+                    dist[i[1], i[2]] = new_dist
+                    pred[i[1], i[2]] = crt
+                    enqueue!(open, i, (new_dist + heuristic(i, target)) )
+                    close[i[1], i[2]] = true  
                 end 
             end
-    
-            push!(visited, crt)
-            
+
             # if all the cells are visisited, stop the algorithm
             if isempty(open)
                 println("Aucun chemin trouvé")
