@@ -1,9 +1,9 @@
 #  Projet d'informatique scientifique L3 Math-Info 2022-2023
 
 # Description
-Implémentation des algorithmes de Dijkstra et A*
-Application des algorithmes sur des fichiers .map
-Utilisation des packages julia suivant : DataStructures, Gtk, Graphics
+Implémentation des algorithmes de Dijkstra et A*.
+Application des algorithmes sur des fichiers .map .
+Utilisation des packages julia suivant : DataStructures, Gtk, Graphics.
 
 #  Instruction
 
