@@ -1,6 +1,6 @@
 using Gtk, Graphics
 
-function show_map(map::Matrix{String}, visited::Vector{Tuple{Int64, Int64}}, path::Vector{Tuple{Int64, Int64}})
+function show_map(map::Matrix{String}, visited::Matrix{Bool}, path::Vector{Tuple{Int64, Int64}})
 
     maph = size(map,1)
     mapw = size(map,2)
@@ -33,21 +33,18 @@ function show_map(map::Matrix{String}, visited::Vector{Tuple{Int64, Int64}}, pat
                 r::Float64 = value[1]
                 g::Float64 = value[2]
                 b::Float64 = value[3]
+                
                 # draw map
                 rectangle(ctx, (i-1)*w/mapw, (j-1)*h/maph, w/mapw, h/maph)
-                set_source_rgb(ctx, r, g, b)
+                if visited[j,i]
+                    set_source_rgb(ctx, 0.2, 1, 0.2)
+                else 
+                    set_source_rgb(ctx, r, g, b)
+                end
                 fill(ctx)
             end
         end
         
-
-        cpt::Int64 = 0
-        for i in visited 
-            rectangle(ctx, (i[2]-1)*w/mapw, (i[1]-1)*h/maph, w/mapw, h/maph)
-            set_source_rgb(ctx, 0.2, 1, 0.2)
-            fill(ctx)
-            cpt += 1
-        end
 
         for i in path
             rectangle(ctx, (i[2]-1)*w/mapw, (i[1]-1)*h/maph, w/mapw, h/maph)

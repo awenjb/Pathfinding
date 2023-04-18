@@ -48,7 +48,6 @@ function AStar(map::Matrix{String}, src::Tuple{Int64, Int64}, target::Tuple{Int6
     # Initialize 
 
     path::Vector{Tuple{Int64, Int64}} = []
-    visited::Vector{Tuple{Int64, Int64}} = []
     
     open = PriorityQueue{Tuple{Int64,Int64}, Int64}() 
     close::Matrix{Bool} = Matrix{Bool}(fill(false, (size(map, 1), size(map, 2)))) 
@@ -69,8 +68,6 @@ function AStar(map::Matrix{String}, src::Tuple{Int64, Int64}, target::Tuple{Int6
 
         # Choose the next cell to visit
         crt = dequeue!(open)    
-        push!(visited, crt)
-
 
         if crt != target 
 
@@ -125,7 +122,6 @@ function AStar(map::Matrix{String}, src::Tuple{Int64, Int64}, target::Tuple{Int6
             # We found the shortest path
             println("Chemin trouvé !")
             found = true
-            push!(visited, crt)
     
             while crt != src
                 push!(path, crt)
@@ -138,7 +134,7 @@ function AStar(map::Matrix{String}, src::Tuple{Int64, Int64}, target::Tuple{Int6
     println("Nombre d'étapes de recherche : ", step)
     println("Taille du chemin : ", dist[target[1], target[2] ])
     println("Nombre de cases du chemin : ", length(path))
-    return (visited, path)
+    return (close, path)
 end
     
 function algoAStar(file::String, src::Tuple{Int64, Int64}, target::Tuple{Int64, Int64})
