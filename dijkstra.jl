@@ -11,6 +11,17 @@ include("show_map.jl")
 =#
 function cost(map::Matrix{String}, cell::Tuple{Int64, Int64})
 
+    # boolean -> passable or not
+    # int -> cost of travel
+    cost_value = Dict(  "@" => (false, 0), 
+                        "T" => (false, 0), 
+                        "O" => (false, 0), 
+                        "." => (true,1),
+                        "G" => (true,1), 
+                        "S" => (true,5), 
+                        "W" => (true,8)
+    )
+
     # is out of bounds ?
     if cell[1] > size(map, 1) || cell[2] > size(map, 2) || cell[1] < 1 || cell[2] < 1
         return (false, 0) 
@@ -18,19 +29,8 @@ function cost(map::Matrix{String}, cell::Tuple{Int64, Int64})
 
      # type of the cell ( a character )
     c = map[cell[1], cell[2]]
+    return cost_value[c]
     
-    # evaluation 
-    if c == "@" || c == "T" || c == "O"
-        return (false, 0)
-    end 
-
-    if c == "." || c == "G"
-        return (true,1)
-    elseif c == "S"
-        return (true,5)
-    else c == "W"
-        return (true,8)
-    end
 end
 
 
